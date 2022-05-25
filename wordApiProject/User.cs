@@ -6,6 +6,7 @@ namespace wordApiProject
 {
     public class User
     {
+        [JsonIgnore]
         public int Id { get; set; }
         [Required]
         public string Name { get; set; } = string.Empty;
@@ -20,10 +21,10 @@ namespace wordApiProject
         public string Description { get; set; } = string.Empty;
         [Required]
         public string Password { get; set; } = string.Empty;
+        public string confirmedpass { get; set; } = string.Empty;
 
         [ForeignKey("Has")]
-        int HasID { get; set; }
+        public int HasID { get; set; }
         
-        public string confirmedpass { get; set; } = string.Empty;
     }
 }

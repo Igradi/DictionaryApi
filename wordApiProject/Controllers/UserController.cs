@@ -26,6 +26,7 @@ namespace wordApiProject.Controllers
                 return BadRequest();
             return Ok( user);
         }
+        [Route("/api/[controller]/POST")]
         [HttpPost]
         public async Task<ActionResult<User>> AddUser(User NewUser)
         {
@@ -34,6 +35,7 @@ namespace wordApiProject.Controllers
           await  _context.SaveChangesAsync();
             return Ok(NewUser);
         }
+
         [HttpPut]
         public async Task<ActionResult<User>> ChangeUser(User newUser)
         {
