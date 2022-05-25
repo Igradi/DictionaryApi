@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace wordApiProject
 {
@@ -23,5 +24,6 @@ namespace wordApiProject
         [ForeignKey("Has")]
         int HasID { get; set; }
         
+        public string confirmedpass { get; set; } = string.Empty;
     }
 }

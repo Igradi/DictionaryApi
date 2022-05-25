@@ -29,6 +29,7 @@ namespace wordApiProject.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> AddUser(User NewUser)
         {
+          
           await _context.Users.AddAsync(NewUser);
           await  _context.SaveChangesAsync();
             return Ok(NewUser);

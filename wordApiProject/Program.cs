@@ -4,7 +4,7 @@ global using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddCors();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DataContext>(options =>
 {
@@ -22,7 +22,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors(options =>
+options.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader()
+);
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
