@@ -72,7 +72,7 @@ app.UseHttpsRedirection();
 app.UseCors(MyAllowSpecificOrigins);
 
 //Provjerit jel tribaju obe useCors metode
-app.UseCors("EnableCORS");
+//app.UseCors("EnableCORS");
 
 app.UseAuthentication();
 app.UseAuthorization();
