@@ -33,9 +33,9 @@ builder.Services.AddAuthentication(opt =>
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
 
-            ValidIssuer= "https://localhost:7153/",
-            ValidAudience= "https://localhost:7153/",
-            IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
+            ValidIssuer= "https://localhost:7153",
+            ValidAudience= "https://localhost:7153",
+            IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is my custom Secret key for authentication"))
         };
     });
 
