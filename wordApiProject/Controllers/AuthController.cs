@@ -27,10 +27,7 @@ namespace wordApiProject.Controllers
         public IActionResult Login([FromBody] LoginModel LoginUser)
         {
 
-            //if (LoginUser == null)
-            //  return BadRequest("invalid client request");
-
-            //if (LoginUser.UserName=="doktor@test.com" && LoginUser.Password=="ja")
+            
             var checkpassword = string.Empty;
             var check = (from User in _context.Users where _context.Users.Any(x=>x.Email == LoginUser.UserName)select User).ToList();
             
@@ -39,9 +36,8 @@ namespace wordApiProject.Controllers
                 checkpassword = user.Password;
                 
             }
-            
-            Console.WriteLine(LoginUser.UserName);
-            Console.WriteLine(LoginUser.Password);
+            //Console.WriteLine(LoginUser.UserName);
+            //Console.WriteLine(LoginUser.Password);
             if (check.Count == 0 || LoginUser.Password!=checkpassword) {
                 return BadRequest("invalid client request");
             } else
