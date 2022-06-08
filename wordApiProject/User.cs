@@ -12,7 +12,6 @@ namespace wordApiProject
         public string Name { get; set; } = string.Empty;
         [Required]
         public string LastName { get; set; } = string.Empty;
-        [Required]
         public string Nickname { get; set; } = string.Empty;
         [Required]
         public string Email { get; set; } = string.Empty;
@@ -21,7 +20,7 @@ namespace wordApiProject
         public string Description { get; set; } = string.Empty;
         [Required]
         public string Password { get; set; } = string.Empty;
-        public string confirmedpass { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
 
         [ForeignKey("Has")]
         public int HasID { get; set; }
