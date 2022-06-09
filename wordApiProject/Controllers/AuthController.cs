@@ -31,16 +31,27 @@ namespace wordApiProject.Controllers
                 }
                 else
                 {
+                    var claims = new[]
+                    {
+                        new Claim(JwtRegisteredClaimNames.Name,check.Name),
+                        new Claim(JwtRegisteredClaimNames.FamilyName,check.LastName),
+                        new Claim(JwtRegisteredClaimNames.Email,check.Email),
+                        new Claim(JwtRegisteredClaimNames.Birthdate,check.DateOfBirth),
+                        new Claim(JwtRegisteredClaimNames.Sub,check.Description),
+                        
+
+                    };
                     var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is my custom Secret key for authentication@345"));
                     var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
                     var tokeOptions = new JwtSecurityToken(
                         issuer: "https://localhost:7153",
                         audience: "https://localhost:7153",
-                        claims: new List<Claim>(),
-                        expires: DateTime.Now.AddMinutes(5),
+                        claims: claims,
+                        expires: DateTime.Now.AddMinutes(30),
                         signingCredentials: signingCredentials
                         );
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+                   
                     return Ok(new { Token = tokenString });
                 }
             }
