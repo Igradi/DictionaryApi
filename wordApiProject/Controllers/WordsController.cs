@@ -23,13 +23,16 @@ namespace wordApiProject
             newWord.WordName = word;
             newWord.WordType = wordType;
             
-            await _context.Words.AddAsync(newWord);
-            var IdQuery = from Words in _context.Words where (Words.WordName == word) select Words.Id;
-            int WordId =  IdQuery.First();
-            newHas.WordId = WordId;
+             _context.Words.Add(newWord);
+            await _context.SaveChangesAsync();
+
+            var IdQuery = from Words in _context.Words where (Words.WordName == newWord.WordName) select Words.Id;
+            
+            newHas.WordId =IdQuery.First();
             newHas.UserId = userID;
             _context.Hass.Add(newHas);
-            return Ok(newHas);
+            await _context.SaveChangesAsync();
+            return Ok(newWord);
         }
 
         [HttpGet]
