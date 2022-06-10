@@ -36,7 +36,6 @@ namespace wordApiProject.Controllers
                         new Claim(JwtRegisteredClaimNames.Name,check.Name),
                         new Claim(JwtRegisteredClaimNames.FamilyName,check.LastName),
                         new Claim(JwtRegisteredClaimNames.Email,check.Email),
-                        new Claim(JwtRegisteredClaimNames.Birthdate,check.DateOfBirth),
                         new Claim(JwtRegisteredClaimNames.Sub,check.Description),
                         
 

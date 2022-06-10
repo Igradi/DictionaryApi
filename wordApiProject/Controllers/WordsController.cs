@@ -14,6 +14,23 @@ namespace wordApiProject
         {
             _context = context;
         }
+        [HttpPost("{userID},{word},{wordType}")]
+        public async Task<ActionResult> PutNewWord(int userID, string word, string wordType)
+        {
+            var newWord = new Words();
+            var newHas = new Has();
+            
+            newWord.WordName = word;
+            newWord.WordType = wordType;
+            
+            await _context.Words.AddAsync(newWord);
+            var IdQuery = from Words in _context.Words where (Words.WordName == word) select Words.Id;
+            int WordId =  IdQuery.First();
+            newHas.WordId = WordId;
+            newHas.UserId = userID;
+            _context.Hass.Add(newHas);
+            return Ok(newHas);
+        }
 
         [HttpGet]
         public async Task<ActionResult<List<Words>>> Get()

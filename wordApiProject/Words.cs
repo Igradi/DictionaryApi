@@ -7,6 +7,7 @@ namespace wordApiProject
 
         public int Id { get; set; }
         public string WordName { get; set; } = String.Empty;
+        public string WordType { get; set; } = String.Empty;
         [ForeignKey("Has")]
         public int HasId { get; set; }
     }
