@@ -16,7 +16,6 @@ namespace wordApiProject
         [Required]
         public string Email { get; set; } = string.Empty;
         public string BussinessMail { get; set; } = string.Empty;
-        public string DateOfBirth { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         [Required]
         public string Password { get; set; } = string.Empty;

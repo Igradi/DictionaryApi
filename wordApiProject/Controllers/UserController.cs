@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using wordApiProject.Models;
 
 namespace wordApiProject.Controllers
 {
@@ -37,19 +38,11 @@ namespace wordApiProject.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<User>> ChangeUser(User newUser)
+        public async Task<ActionResult<User>> ChangeUser([FromBody] LoginModel LoginUser)
         {
-            var oldUser = await _context.Users.FindAsync(newUser.Id);
-            oldUser.Name = String.Copy(newUser.Name); ;
-            oldUser.LastName = String.Copy(newUser.LastName);
-            oldUser.DateOfBirth = String.Copy(newUser.DateOfBirth);
-            oldUser.Email = String.Copy(newUser.Email);
-            oldUser.BussinessMail = String.Copy(newUser.BussinessMail);
-            oldUser.Description = String.Copy(newUser.Description);
-            await _context.SaveChangesAsync();
-            return (oldUser);
 
-            
+
+            return Ok();
 
         }
         [HttpDelete("{id}")]
