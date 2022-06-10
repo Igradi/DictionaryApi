@@ -30,7 +30,13 @@ namespace wordApiProject
             
             newHas.WordId =IdQuery.First();
             newHas.UserId = userID;
+
             _context.Hass.Add(newHas);
+            await _context.SaveChangesAsync();
+
+            var IdHasQuery = from Hass in _context.Hass where ( Hass.WordId == newHas.WordId) select Hass.Id;
+            var dbWord = await _context.Words.FindAsync(newHas.WordId);
+            dbWord.HasId = IdHasQuery.First();
             await _context.SaveChangesAsync();
             return Ok(newWord);
         }
