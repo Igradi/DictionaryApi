@@ -38,9 +38,9 @@ namespace wordApiProject.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<User>> ChangeUser([FromBody] LoginModel LoginUser)
+        public async Task<ActionResult<User>> ChangeUser([FromBody] EditUserModel editUser)
         {
-
+            
 
             return Ok();
 
