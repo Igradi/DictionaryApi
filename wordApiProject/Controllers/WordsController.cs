@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using wordApiProject.Models;
 namespace wordApiProject
 {
    [Route("api/[controller]")]
@@ -14,13 +14,15 @@ namespace wordApiProject
         {
             _context = context;
         }
-        [HttpPost("{userID},{word},{wordType}")]
-        public async Task<ActionResult> PutNewWord(int userID, string word, string wordType)
+        
+        [HttpGet("{id},{wordName},{wordType}")]
+        public async Task<ActionResult> PutNewWord(int id,string wordName,string wordType)
         {
+            
             var newWord = new Words();
             var newHas = new Has();
             
-            newWord.WordName = word;
+            newWord.WordName = wordName;
             newWord.WordType = wordType;
             
              _context.Words.Add(newWord);
@@ -29,7 +31,7 @@ namespace wordApiProject
             var IdQuery = from Words in _context.Words where (Words.WordName == newWord.WordName) select Words.Id;
             
             newHas.WordId =IdQuery.First();
-            newHas.UserId = userID;
+            newHas.UserId = id;
 
             _context.Hass.Add(newHas);
             await _context.SaveChangesAsync();
@@ -38,9 +40,10 @@ namespace wordApiProject
             var dbWord = await _context.Words.FindAsync(newHas.WordId);
             dbWord.HasId = IdHasQuery.First();
             await _context.SaveChangesAsync();
-            return Ok(newWord);
+            return Ok();
         }
-
+        
+    
         [HttpGet]
         public async Task<ActionResult<List<Words>>> Get()
         {
@@ -56,14 +59,6 @@ namespace wordApiProject
             return Ok(word);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<List<Words>>> AddWord(Words word)
-        {
-            _context.Words.Add(word);
-            await _context.SaveChangesAsync();
-
-            return Ok(await _context.Words.ToListAsync());
-        }
         [HttpPut]
         public async Task<ActionResult<List<Words>>> UpdateWord(Words request)
         {
