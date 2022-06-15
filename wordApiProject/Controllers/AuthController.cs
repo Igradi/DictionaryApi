@@ -33,7 +33,9 @@ namespace wordApiProject.Controllers
                 {
                     var claims = new[]
                     {
+                        new Claim(type: "id",value: check.Id.ToString()),
                         new Claim(JwtRegisteredClaimNames.Name,check.Name),
+                        new Claim(JwtRegisteredClaimNames.GivenName,check.Nickname),
                         new Claim(JwtRegisteredClaimNames.FamilyName,check.LastName),
                         new Claim(JwtRegisteredClaimNames.Email,check.Email),
                         new Claim(JwtRegisteredClaimNames.Sub,check.Description),

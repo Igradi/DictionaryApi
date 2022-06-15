@@ -38,7 +38,7 @@ namespace wordApiProject.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<User>> ChangeUser(int id, [FromBody] EditUserModel editUser)
+        public async Task<ActionResult<User>> ChangeUser(int id,[FromBody] EditUserModel editUser)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null) {
