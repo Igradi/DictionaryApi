@@ -38,11 +38,22 @@ namespace wordApiProject.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<User>> ChangeUser([FromBody] EditUserModel editUser)
+        public async Task<ActionResult<User>> ChangeUser(int id, [FromBody] EditUserModel editUser)
         {
-            
+            var user = await _context.Users.FindAsync(id);
+            if (user == null) {
+                return BadRequest();
+            }
 
-            return Ok();
+            user.Nickname = editUser.Nickname;
+            user.BussinessMail = editUser.BusinessMail;
+            user.PhoneNumber = editUser.ContactNumber;
+            user.Description = editUser.Description;
+
+            await _context.SaveChangesAsync();
+
+
+            return Ok(await _context.Words.ToListAsync());
 
         }
         [HttpDelete("{id}")]
