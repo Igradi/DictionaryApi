@@ -43,14 +43,13 @@ namespace wordApiProject.Controllers
             if (user == null) {
                 return BadRequest();
             }
-
+           
             user.Nickname = editUser.Nickname;
-            user.BussinessMail = editUser.BusinessMail;
+            user.BussinessMail = editUser.BussinessMail;
             user.PhoneNumber = editUser.ContactNumber;
             user.Description = editUser.Description;
 
             await _context.SaveChangesAsync();
-
 
             return Ok(await _context.Words.ToListAsync());
 
