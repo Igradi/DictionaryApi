@@ -16,16 +16,15 @@ namespace wordApiProject.Controllers
         [HttpGet]
         public async Task<ActionResult<List<User>>> getUsers()
         {
-
             return Ok(await _context.Users.ToListAsync());
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> getUser(int id)
+        public async Task<ActionResult<User>> getUserNickame(int id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
                 return BadRequest();
-            return Ok( user);
+            return Ok( user.Nickname);
         }
         [Route("/api/[controller]/POST")]
         [HttpPost]
