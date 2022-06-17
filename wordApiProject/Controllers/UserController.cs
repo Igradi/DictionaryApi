@@ -18,6 +18,15 @@ namespace wordApiProject.Controllers
         {
             return Ok(await _context.Users.ToListAsync());
         }
+        [Route(("/api/[controller]/GETUSER"))]
+        [HttpGet]
+        public async Task<ActionResult<User>> getUser(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+                return BadRequest();
+            return Ok(user);
+        }
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> getUserNickame(int id)
         {
