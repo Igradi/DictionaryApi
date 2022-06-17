@@ -33,14 +33,7 @@ namespace wordApiProject.Controllers
                 {
                     var claims = new[]
                     {
-                        new Claim(type: "id",value: check.Id.ToString()),
-                        new Claim(JwtRegisteredClaimNames.Name,check.Name),
-                        new Claim(JwtRegisteredClaimNames.GivenName,check.Nickname),
-                        new Claim(JwtRegisteredClaimNames.FamilyName,check.LastName),
-                        new Claim(JwtRegisteredClaimNames.Email,check.Email),
-                        new Claim(JwtRegisteredClaimNames.Sub,check.Description),
-                        
-
+                        new Claim(type: "id",value: check.Id.ToString())
                     };
                     var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is my custom Secret key for authentication@345"));
                     var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
