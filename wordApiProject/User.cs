@@ -22,8 +22,7 @@ namespace wordApiProject
         public string Password { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
 
-        [ForeignKey("Has")]
-        public int HasID { get; set; }
+        
         
     }
 }
