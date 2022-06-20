@@ -33,7 +33,8 @@ namespace wordApiProject.Controllers
                 {
                     var claims = new[]
                     {
-                        new Claim(type: "id",value: check.Id.ToString())
+                        new Claim(type: "id",value: check.Id.ToString()),
+                        new Claim(type: "role",value:check.Role),
                     };
                     var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is my custom Secret key for authentication@345"));
                     var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
