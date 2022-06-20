@@ -51,12 +51,22 @@ namespace wordApiProject
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Words>> Get(int id)
+        public async Task<ActionResult<int>>GetNumOfWords(int id)
         {
-            var word = await _context.Words.FindAsync(id);
-            if (word == null)
-                return BadRequest("word not found.");
-            return Ok(word);
+            int counter = 0;
+            counter =  _context.Hass.Count(Hass=>Hass.UserId == id);
+            return( counter);
+        }
+
+        [Route(("/api/[controller]/getTypes"))]
+        [HttpGet]
+        public async Task<ActionResult<int>> GetNumOfTypes(int id)
+        {
+            TyoesModel types = new TyoesModel();
+            List<int> wordIds = new List<int>();
+              
+            
+            return Ok();
         }
 
         [HttpPut]
