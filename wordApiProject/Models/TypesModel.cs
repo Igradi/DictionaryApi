@@ -1,6 +1,6 @@
 ﻿namespace wordApiProject.Models
 {
-    public class TyoesModel
+    public class TypesModel
     {
         public int nouns = 0;
         public int adjectives = 0;

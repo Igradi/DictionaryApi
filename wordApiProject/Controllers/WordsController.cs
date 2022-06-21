@@ -66,7 +66,7 @@ namespace wordApiProject
         [HttpGet]
         public async Task<ActionResult<string>> GetNumOfTypes(int id)
         {
-            TyoesModel types = new TyoesModel();
+            TypesModel types = new TypesModel();
             List<int> wordIds = new List<int>();
             wordIds = (from Hass in _context.Hass where Hass.UserId == id select Hass.WordId).ToList();
            
