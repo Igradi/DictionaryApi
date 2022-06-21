@@ -93,7 +93,6 @@ namespace wordApiProject
 
             }
             string jsonString = JsonConvert.SerializeObject(types);
-            Console.WriteLine(types.nouns);
             Console.WriteLine(jsonString);
             return Ok(jsonString) ;
         }

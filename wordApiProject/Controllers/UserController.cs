@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using wordApiProject.Models;
-
+using Newtonsoft.Json;
 namespace wordApiProject.Controllers
 {
     [Route("api/[controller]")]
@@ -14,9 +14,15 @@ namespace wordApiProject.Controllers
             _context = context;
         }
         [HttpGet]
-        public async Task<ActionResult<List<User>>> getUsers()
+        public async Task<ActionResult<string>> getUsers()
         {
-            return Ok(await _context.Users.ToListAsync());
+            
+
+            var shortUsers = (from Users in _context.Users select new {id =Users.Id, name= Users.Name,lastName = Users.LastName,email=Users.Email
+            ,bussinessMail=Users.BussinessMail,nickname=Users.Nickname,phoneNumber = Users.PhoneNumber}).ToList();
+            string jsonString = JsonConvert.SerializeObject(shortUsers);
+           
+            return jsonString;
         }
         [Route(("/api/[controller]/GETUSER"))]
         [HttpGet]
