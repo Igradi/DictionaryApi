@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using wordApiProject.Models;
+
+using Newtonsoft.Json;
 namespace wordApiProject
 {
    [Route("api/[controller]")]
@@ -47,6 +49,7 @@ namespace wordApiProject
         [HttpGet]
         public async Task<ActionResult<List<Words>>> Get()
         {
+            
             return Ok(await _context.Words.ToListAsync());
         }
 
@@ -55,18 +58,44 @@ namespace wordApiProject
         {
             int counter = 0;
             counter =  _context.Hass.Count(Hass=>Hass.UserId == id);
+            
             return( counter);
         }
 
         [Route(("/api/[controller]/getTypes"))]
         [HttpGet]
-        public async Task<ActionResult<int>> GetNumOfTypes(int id)
+        public async Task<ActionResult<string>> GetNumOfTypes(int id)
         {
             TyoesModel types = new TyoesModel();
             List<int> wordIds = new List<int>();
-              
-            
-            return Ok();
+            wordIds = (from Hass in _context.Hass where Hass.UserId == id select Hass.WordId).ToList();
+           
+            foreach(var wordId in wordIds)
+            {
+                
+                var word = await _context.Words.FindAsync(wordId);
+               
+                switch (word.WordType)
+                {
+                    case "noun":
+                        types.nouns++;
+                        break;
+                    case "verb":
+                        types.verb++;
+                        break;
+                    case "adjective":
+                        types.adjectives++;
+                        break;
+                    case "adverb":
+                        types.adverb++;
+                        break;
+                }
+
+            }
+            string jsonString = JsonConvert.SerializeObject(types);
+            Console.WriteLine(types.nouns);
+            Console.WriteLine(jsonString);
+            return Ok(jsonString) ;
         }
 
         [HttpPut]
