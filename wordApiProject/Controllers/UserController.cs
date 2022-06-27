@@ -45,8 +45,9 @@ namespace wordApiProject.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> AddUser(User NewUser)
         {
-          
-          await _context.Users.AddAsync(NewUser);
+          string changingPass = NewUser.Password;
+          NewUser.Password = BCrypt.Net.BCrypt.HashPassword(changingPass);  
+           await _context.Users.AddAsync(NewUser);
           await  _context.SaveChangesAsync();
             return Ok(NewUser);
         }

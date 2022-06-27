@@ -25,7 +25,8 @@ namespace wordApiProject.Controllers
                 var primaryKey = from User in _context.Users where (User.Email == LoginUser.UserName) select User.Id;
                 int id = primaryKey.First();
                 var check = _context.Users.Find(id);
-                if (check.Password != LoginUser.Password)
+
+                if (!(BCrypt.Net.BCrypt.Verify(LoginUser.Password, check.Password)))
                 {
                     return BadRequest("Wrong password");
                 }
