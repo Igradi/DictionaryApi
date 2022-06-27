@@ -21,7 +21,12 @@ namespace wordApiProject
         [Required]
         public string Password { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
-        public string Role { get; set; } = "user";
+        public  Role role{ get; set; } = Role.user;
 
+    }
+    public enum Role
+    {
+        user,
+        admin
     }
 }
