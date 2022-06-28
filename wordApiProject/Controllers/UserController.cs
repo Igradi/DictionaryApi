@@ -18,7 +18,7 @@ namespace wordApiProject.Controllers
         {
             
 
-            var shortUsers = (from Users in _context.Users select new {id =Users.Id, name= Users.Name,lastName = Users.LastName,email=Users.Email
+            var shortUsers = (from Users in _context.Users where Users.role != Role.admin select new {id =Users.Id, name= Users.Name,lastName = Users.LastName,email=Users.Email
             ,bussinessMail=Users.BussinessMail,nickname=Users.Nickname,phoneNumber = Users.PhoneNumber}).ToList();
             string jsonString = JsonConvert.SerializeObject(shortUsers);
            
