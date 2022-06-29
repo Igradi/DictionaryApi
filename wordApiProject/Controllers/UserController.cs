@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using wordApiProject.Models;
 using Newtonsoft.Json;
+using System.Security.Cryptography;
+
 namespace wordApiProject.Controllers
 {
     [Route("api/[controller]")]
@@ -45,7 +47,7 @@ namespace wordApiProject.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> AddUser(User NewUser)
         {
-          string changingPass = NewUser.Password;
+            string changingPass = NewUser.Password;
           NewUser.Password = BCrypt.Net.BCrypt.HashPassword(changingPass);  
            await _context.Users.AddAsync(NewUser);
           await  _context.SaveChangesAsync();
@@ -82,6 +84,42 @@ namespace wordApiProject.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
-        
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                return BadRequest("User not found.");
+            }
+
+            user.PasswordResetToken = CreateRandomToken();
+            user.ResetTokenExpires = DateTime.Now.AddDays(1);
+            await _context.SaveChangesAsync();
+
+            return Ok("You may now reset your password.");
+        }
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResettPassword(ResetPasswordRequest request)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == request.Token);
+            if (user == null || user.ResetTokenExpires < DateTime.Now)
+            {
+                return BadRequest("Invalid Token.");
+            }
+
+
+            user.Password = "sifra12345";
+            user.PasswordResetToken = null;
+            user.ResetTokenExpires = null;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Password successfully reset.");
+        }
+        private string CreateRandomToken()
+        {
+            return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+        }
     }
 }
