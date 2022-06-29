@@ -47,6 +47,11 @@ namespace wordApiProject.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> AddUser(User NewUser)
         {
+            var dbUser = _context.Users.Where(u => u.Email == NewUser.Email).FirstOrDefault();
+            if(dbUser != null)
+            {
+                return BadRequest("User already exist");
+            }
             string changingPass = NewUser.Password;
           NewUser.Password = BCrypt.Net.BCrypt.HashPassword(changingPass);  
            await _context.Users.AddAsync(NewUser);
