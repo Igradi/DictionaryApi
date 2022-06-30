@@ -114,7 +114,7 @@ namespace wordApiProject.Controllers
             }
 
 
-            user.Password = "sifra12345";
+            user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password); 
             user.PasswordResetToken = null;
             user.ResetTokenExpires = null;
 
