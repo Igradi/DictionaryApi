@@ -16,7 +16,33 @@ namespace wordApiProject
         {
             _context = context;
         }
-        
+        [Route(("/api/[controller]/NumberOfwordsOfUsers"))]
+        [HttpGet]
+        public async Task<ActionResult> NumberOfWordsOfUsers()
+        {
+            AllWordsModel[] allWords = new AllWordsModel[4];
+            for(int i = 0; i < 4; i++)
+            {
+                allWords[i] = new AllWordsModel();
+            }
+            int countNouns = (from Words in _context.Words where Words.WordType == "noun" select Words).Count();
+            int countAdjectives = (from Words in _context.Words where Words.WordType == "adjective" select Words).Count();
+            int countAdverb = (from Words in _context.Words where Words.WordType == "adverb" select Words).Count();
+            int countVerb = (from Words in _context.Words where Words.WordType == "verb" select Words).Count();
+
+            allWords[0].name = "noun";
+            allWords[0].value = countNouns;
+            allWords[1].name= "adjective";
+            allWords[1].value = countAdjectives;
+            allWords[2].name = "adverb";
+            allWords[2].value = countAdverb;
+            allWords[3].name = "verb";
+            allWords[3].value = countVerb;
+            string jsonString = JsonConvert.SerializeObject(allWords);
+            return Ok(jsonString);
+        }
+
+
         [HttpGet("{id},{wordName},{wordType}")]
         public async Task<ActionResult> PutNewWord(int id,string wordName,string wordType)
         {
