@@ -28,11 +28,14 @@ namespace wordApiProject.Controllers
 
                 if (!(BCrypt.Net.BCrypt.Verify(LoginUser.Password, check.Password)))
                 {
+                    check.FailedPasswordAttempts++;
+                    _context.SaveChangesAsync();
                     return BadRequest("Wrong password");
                 }
                 else
                 {
-                    
+                    check.FailedPasswordAttempts = 0;
+                    _context.SaveChangesAsync();
                     var claims = new[]
                     {
                         new Claim(type: "id",value: check.Id.ToString()),
@@ -48,6 +51,7 @@ namespace wordApiProject.Controllers
                         signingCredentials: signingCredentials
                         );
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+
                    
                     return Ok(new { Token = tokenString });
                 }
