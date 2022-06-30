@@ -25,6 +25,7 @@ namespace wordApiProject
         public string? PasswordResetToken { get; set; }
         public DateTime? ResetTokenExpires { get; set; }
         public int FailedPasswordAttempts { get; set; } = 0;
+        public DateTime? BanExpires { get; set; }
 
     }
     public enum Role
