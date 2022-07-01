@@ -32,6 +32,12 @@ namespace wordApiProject.Controllers
                     _context.SaveChangesAsync();
                     return BadRequest("Wrong password");
                 }
+                else if (check.FailedPasswordAttempts >= 3)
+                {
+                    return BadRequest("you are banned");
+                    check.BanExpires = DateTime.Now.AddMinutes(15);
+                    _context.SaveChangesAsync();
+                }
                 else
                 {
                     check.FailedPasswordAttempts = 0;
