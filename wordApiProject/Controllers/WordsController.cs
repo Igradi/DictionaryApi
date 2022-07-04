@@ -52,23 +52,29 @@ namespace wordApiProject
             
             newWord.WordName = wordName;
             newWord.WordType = wordType;
-            
-             _context.Words.Add(newWord);
-            await _context.SaveChangesAsync();
+            var wordExists = from Words in _context.Words where (Words.WordName == wordName) select Words;
+            if (wordExists.Count() > 0)
+            {
+                return Ok();
+            }
+            else {
+                _context.Words.Add(newWord);
+                await _context.SaveChangesAsync();
 
-            var IdQuery = from Words in _context.Words where (Words.WordName == newWord.WordName) select Words.Id;
-            
-            newHas.WordId =IdQuery.First();
-            newHas.UserId = id;
+                var IdQuery = from Words in _context.Words where (Words.WordName == newWord.WordName) select Words.Id;
 
-            _context.Hass.Add(newHas);
-            await _context.SaveChangesAsync();
+                newHas.WordId = IdQuery.First();
+                newHas.UserId = id;
 
-            var IdHasQuery = from Hass in _context.Hass where ( Hass.WordId == newHas.WordId) select Hass.Id;
-            var dbWord = await _context.Words.FindAsync(newHas.WordId);
-            dbWord.HasId = IdHasQuery.First();
-            await _context.SaveChangesAsync();
-            return Ok();
+                _context.Hass.Add(newHas);
+                await _context.SaveChangesAsync();
+
+                var IdHasQuery = from Hass in _context.Hass where (Hass.WordId == newHas.WordId) select Hass.Id;
+                var dbWord = await _context.Words.FindAsync(newHas.WordId);
+                dbWord.HasId = IdHasQuery.First();
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
         }
         
     
