@@ -52,10 +52,22 @@ namespace wordApiProject
             
             newWord.WordName = wordName;
             newWord.WordType = wordType;
-            var wordExists = from Words in _context.Words where (Words.WordName == wordName) select Words;
+            var wordExists = from Words in _context.Words where (Words.WordName == wordName) select Words.Id;
             if (wordExists.Count() > 0)
             {
+                var link = from Has in _context.Hass where (Has.WordId == wordExists.First()) select Has; 
+                
+               if(link.First().UserId!= id) {  
+               newHas.WordId = link.First().WordId;
+               newHas.UserId = id;
+              
+              _context.Hass.Add(newHas);
+                   await _context.SaveChangesAsync();
+                    return Ok();
+
+                }
                 return Ok();
+
             }
             else {
                 _context.Words.Add(newWord);
