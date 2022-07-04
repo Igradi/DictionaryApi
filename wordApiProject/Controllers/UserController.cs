@@ -90,7 +90,7 @@ namespace wordApiProject.Controllers
             return Ok();
         }
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword(string email)
+        public async Task<IActionResult> ForgotPassword([FromBody] string email)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (user == null)
