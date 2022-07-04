@@ -117,7 +117,7 @@ namespace wordApiProject.Controllers
             user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password); 
             user.PasswordResetToken = null;
             user.ResetTokenExpires = null;
-
+            user.FailedPasswordAttempts = 0;
             await _context.SaveChangesAsync();
 
             return Ok("Password successfully reset.");
