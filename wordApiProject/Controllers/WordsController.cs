@@ -55,9 +55,10 @@ namespace wordApiProject
             var wordExists = from Words in _context.Words where (Words.WordName == wordName) select Words.Id;
             if (wordExists.Count() > 0)
             {
-                var link = from Has in _context.Hass where (Has.WordId == wordExists.First()) select Has; 
-                
-               if(link.First().UserId!= id) {  
+                var link = from Has in _context.Hass where (Has.WordId == wordExists.First()) select Has;
+                var listOfIds = (from Has in _context.Hass where (Has.WordId == wordExists.First()) select Has.UserId).ToList();
+              
+                if (!listOfIds.Contains(id)) {  
                newHas.WordId = link.First().WordId;
                newHas.UserId = id;
               

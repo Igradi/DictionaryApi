@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using wordApiProject.Models;
 namespace wordApiProject.Controllers
 {
     [Route("api/[controller]")]
@@ -20,6 +20,24 @@ namespace wordApiProject.Controllers
 
 
             yield return await targetWords;
+        }
+        [Route(("/api/[controller]/topWords"))]
+        [HttpGet] public async Task<ActionResult> topWords()
+        {
+            List<RepetitionModel> topWords = new List<RepetitionModel>();
+            var top10Words = (from Has in _context.Hass select Has.WordId).ToList();
+            var query = top10Words.GroupBy(x => x).Where(g => g.Count() > 1).Select(y => new { Element = y.Key, Counter = y.Count() }).Take(10).ToList();
+            foreach(var word in query)
+            {
+               RepetitionModel newEntry = new RepetitionModel();
+                newEntry.wordName = _context.Words.Find(word.Element).WordName;
+                newEntry.repetiotions = word.Counter;
+                topWords.Add(newEntry);
+            }
+
+            return Ok(topWords);
+           
+            
         }
         [HttpDelete("id")]
         public async Task<ActionResult<int>> Delete(int id)
