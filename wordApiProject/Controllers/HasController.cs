@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using wordApiProject.Models;
+using Newtonsoft.Json;
 namespace wordApiProject.Controllers
 {
     [Route("api/[controller]")]
@@ -34,8 +35,8 @@ namespace wordApiProject.Controllers
                 newEntry.repetiotions = word.Counter;
                 topWords.Add(newEntry);
             }
-
-            return Ok(topWords);
+            string jsonString = JsonConvert.SerializeObject(topWords);
+            return Ok(jsonString);
            
             
         }
