@@ -28,7 +28,8 @@ namespace wordApiProject.Controllers
             List<RepetitionModel> topWords = new List<RepetitionModel>();
             var top10Words = (from Has in _context.Hass select Has.WordId).ToList();
             var query = top10Words.GroupBy(x => x).Where(g => g.Count() > 1).Select(y => new { Element = y.Key, Counter = y.Count() }).Take(10).ToList();
-            foreach(var word in query)
+            var ordered = query.OrderByDescending(x => x.Counter).ToList();
+            foreach(var word in ordered)
             {
                RepetitionModel newEntry = new RepetitionModel();
                 newEntry.wordName = _context.Words.Find(word.Element).WordName;
