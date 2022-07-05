@@ -59,13 +59,7 @@ namespace wordApiProject.Controllers
                 _context.Hass.Remove(hass);
             }
             _context.SaveChanges();
-            var words = from Words in _context.Words where wordsId.Contains(Words.Id) select Words;
-            
-            foreach (Words word in words)
-            {
-                _context.Words.Remove(word);
-            }
-            _context.SaveChanges();
+         
             return Ok(id);
         }
     }
