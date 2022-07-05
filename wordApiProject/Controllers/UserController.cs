@@ -99,7 +99,7 @@ namespace wordApiProject.Controllers
             }
 
             user.PasswordResetToken = CreateRandomToken();
-            user.ResetTokenExpires = DateTime.Now.AddDays(1);
+            user.ResetTokenExpires = DateTime.Now.AddMinutes(10);
             await _context.SaveChangesAsync();
 
             return Ok("You may now reset your password.");
@@ -124,7 +124,7 @@ namespace wordApiProject.Controllers
         }
         private string CreateRandomToken()
         {
-            return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+            return Convert.ToHexString(RandomNumberGenerator.GetBytes(4));
         }
     }
 }
