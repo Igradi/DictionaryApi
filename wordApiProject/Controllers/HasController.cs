@@ -32,7 +32,7 @@ namespace wordApiProject.Controllers
             {
                RepetitionModel newEntry = new RepetitionModel();
                 newEntry.wordName = _context.Words.Find(word.Element).WordName;
-                newEntry.repetiotions = word.Counter;
+                newEntry.repetitions = word.Counter;
                 topWords.Add(newEntry);
             }
             string jsonString = JsonConvert.SerializeObject(topWords);
