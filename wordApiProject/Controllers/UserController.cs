@@ -2,6 +2,10 @@
 using wordApiProject.Models;
 using Newtonsoft.Json;
 using System.Security.Cryptography;
+using MimeKit;
+using MimeKit.Text;
+using MailKit.Net.Smtp;
+using MailKit.Security;
 
 namespace wordApiProject.Controllers
 {
@@ -101,6 +105,18 @@ namespace wordApiProject.Controllers
             user.PasswordResetToken = CreateRandomToken();
             user.ResetTokenExpires = DateTime.Now.AddMinutes(10);
             await _context.SaveChangesAsync();
+
+            var sentemail = new MimeMessage();
+            sentemail.From.Add(MailboxAddress.Parse("lisette.keebler81@ethereal.email"));
+            sentemail.To.Add(MailboxAddress.Parse("lisette.keebler81@ethereal.email"));
+            sentemail.Subject = "test mail subject";
+            sentemail.Body = new TextPart(TextFormat.Html) { Text = user.PasswordResetToken };
+
+            using var smtp = new SmtpClient();
+            smtp.Connect("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
+            smtp.Authenticate("lisette.keebler81@ethereal.email", "TS6vGNFkEs8TkP62WJ");
+            smtp.Send(sentemail);
+            smtp.Disconnect(true);
 
             return Ok("You may now reset your password.");
         }
