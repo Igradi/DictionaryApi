@@ -105,7 +105,7 @@ namespace wordApiProject.Controllers
             return Ok("You may now reset your password.");
         }
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResettPassword(ResetPasswordRequest request)
+        public async Task<ActionResult<string>> ResettPassword(ResetPasswordRequest request)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == request.Token);
             if (user == null || user.ResetTokenExpires < DateTime.Now)
@@ -120,7 +120,7 @@ namespace wordApiProject.Controllers
             user.FailedPasswordAttempts = 0;
             await _context.SaveChangesAsync();
 
-            return Ok("Password successfully reset.");
+            return Ok();
         }
         private string CreateRandomToken()
         {
