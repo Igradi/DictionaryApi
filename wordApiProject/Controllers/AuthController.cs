@@ -23,14 +23,11 @@ namespace wordApiProject.Controllers
         {
             try
             {
-                var primaryKey = from User in _context.Users where (User.Email == LoginUser.UserName) select User.Id;
-                int id = primaryKey.First();
-                var logedInUser = _context.Users.Find(id);
+                var logedInUser = SearchUser(LoginUser);
 
                 if (!(BCrypt.Net.BCrypt.Verify(LoginUser.Password, logedInUser.Password)))
                 {
-                    logedInUser.FailedPasswordAttempts++;
-                    _context.SaveChangesAsync();
+                    PasswordFailedAttemp(logedInUser);
                     return BadRequest("Wrong password");
                 }
                 else if (logedInUser.FailedPasswordAttempts >= 3)
@@ -64,6 +61,19 @@ namespace wordApiProject.Controllers
             {
                 return BadRequest("User not found");
             }
+        }
+        private User SearchUser(LoginModel LoginUser)
+        {
+            var primaryKey = from User in _context.Users where (User.Email == LoginUser.UserName) select User.Id;
+            int id = primaryKey.First();
+            var logedInUser = _context.Users.Find(id);
+
+            return logedInUser;
+        }
+        private void PasswordFailedAttemp(User logedInUser)
+        {
+            logedInUser.FailedPasswordAttempts++;
+            _context.SaveChangesAsync();
         }
         private void ResetFailedAttempts(User logedInUser)
         {
