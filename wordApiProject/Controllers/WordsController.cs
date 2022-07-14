@@ -102,10 +102,31 @@ namespace wordApiProject
         [HttpGet]
         public async Task<ActionResult<string>> GetNumOfTypes(int id)
         {
+            TypesModel types = new TypesModel();
+
            var wordIds = (from UserWord in _context.UserWords where UserWord.UserId == id select UserWord.WordId).ToList();
             var query = (from Words in _context.Words where wordIds.Contains(Words.Id)select Words).GroupBy(x=>x.WordType).Select(y=> new { name = y.Key, value = y.Count() });
-
-            return Ok(query);
+            
+            foreach(var type in query)
+            {
+                switch (type.name)
+                {
+                    case "noun":
+                        types.nouns = type.value;
+                        break;
+                    case "adjective":
+                        types.adjectives = type.value;
+                        break;
+                    case "adverb":
+                        types.adverb = type.value;
+                        break;
+                    case "verb":
+                        types.verb = type.value;
+                        break;
+                }
+            }
+            
+            return Ok(JsonConvert.SerializeObject(types));
         }
 
         [HttpPut]
