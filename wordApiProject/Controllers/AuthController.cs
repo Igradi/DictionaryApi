@@ -19,13 +19,13 @@ namespace wordApiProject.Controllers
             _context = context;
         }
         [HttpPost, Route("login")]
-        public IActionResult Login([FromBody] LoginModel LoginUser)
+        public IActionResult Login([FromBody] LoginModel loginUser)
         {
             try
             {
-                var logedInUser = SearchUser(LoginUser);
+                var logedInUser = SearchUser(loginUser);
 
-                if (!(BCrypt.Net.BCrypt.Verify(LoginUser.Password, logedInUser.Password)))
+                if (!(BCrypt.Net.BCrypt.Verify(loginUser.Password, logedInUser.Password)))
                 {
                     PasswordFailedAttemp(logedInUser);
                     return BadRequest("Wrong password");
@@ -36,24 +36,7 @@ namespace wordApiProject.Controllers
                 }
                 else
                 {
-                    ResetFailedAttempts(logedInUser);
-                    var claims = new[]
-                    {
-                        new Claim(type: "id",value: logedInUser.Id.ToString()),
-                        new Claim(type: "role",value:logedInUser.role.ToString()),
-                    };
-                    var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is my custom Secret key for authentication@345"));
-                    var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-                    var tokeOptions = new JwtSecurityToken(
-                        issuer: "https://localhost:7153",
-                        audience: "https://localhost:7153",
-                        claims: claims,
-                        expires: DateTime.Now.AddMinutes(30),
-                        signingCredentials: signingCredentials
-                        );
-                    var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-
-
+                    var tokenString = LogedInUserInfo(logedInUser);
                     return Ok(new { Token = tokenString });
                 }
             }
@@ -69,6 +52,28 @@ namespace wordApiProject.Controllers
             var logedInUser = _context.Users.Find(id);
 
             return logedInUser;
+        }
+        private string LogedInUserInfo(User logedInUser)
+        {
+            ResetFailedAttempts(logedInUser);
+            var claims = new[]
+            {
+                        new Claim(type: "id",value: logedInUser.Id.ToString()),
+                        new Claim(type: "role",value:logedInUser.role.ToString()),
+                    };
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is my custom Secret key for authentication@345"));
+            var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+            var tokeOptions = new JwtSecurityToken(
+                issuer: "https://localhost:7153",
+                audience: "https://localhost:7153",
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: signingCredentials
+                );
+            var tokensString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+
+
+            return tokensString;
         }
         private void PasswordFailedAttemp(User logedInUser)
         {
