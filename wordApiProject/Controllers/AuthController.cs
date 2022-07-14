@@ -21,7 +21,8 @@ namespace wordApiProject.Controllers
         [HttpPost, Route("login")]
         public IActionResult Login([FromBody] LoginModel LoginUser)
         {
-            try { 
+            try
+            {
                 var primaryKey = from User in _context.Users where (User.Email == LoginUser.UserName) select User.Id;
                 int id = primaryKey.First();
                 var check = _context.Users.Find(id);
@@ -58,7 +59,7 @@ namespace wordApiProject.Controllers
                         );
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
 
-                   
+
                     return Ok(new { Token = tokenString });
                 }
             }
@@ -67,5 +68,6 @@ namespace wordApiProject.Controllers
                 return BadRequest("User not found");
             }
         }
+
     }
 }

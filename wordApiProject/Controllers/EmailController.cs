@@ -20,10 +20,10 @@ namespace wordApiProject.Controllers
             email.From.Add(MailboxAddress.Parse("aglae.hackett58@ethereal.email"));
             email.To.Add(MailboxAddress.Parse("aglae.hackett58@ethereal.email"));
             email.Subject = "test mail subject";
-            email.Body=new TextPart(TextFormat.Html) { Text=resetUser.Token };
+            email.Body = new TextPart(TextFormat.Html) { Text = resetUser.Token };
 
             using var smtp = new SmtpClient();
-            smtp.Connect("smtp.ethereal.email", 587,SecureSocketOptions.StartTls);
+            smtp.Connect("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
             smtp.Authenticate("aglae.hackett58@ethereal.email", "tJ6m3h6BXhAdzJ9YuF");
             smtp.Send(email);
             smtp.Disconnect(true);

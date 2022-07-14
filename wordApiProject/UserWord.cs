@@ -2,7 +2,7 @@
 
 namespace wordApiProject
 {
-    public class Has
+    public class UserWord
     {
 
         public int Id { get; set; }

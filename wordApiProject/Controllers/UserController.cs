@@ -7,7 +7,7 @@ namespace wordApiProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController: ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly DataContext _context;
 
@@ -15,80 +15,95 @@ namespace wordApiProject.Controllers
         {
             _context = context;
         }
-        [HttpGet]
-        public async Task<ActionResult<string>> getUsers()
-        {
-            
 
-            var shortUsers = (from Users in _context.Users where Users.role != Role.admin select new {id =Users.Id, name= Users.Name,lastName = Users.LastName,email=Users.Email
-            ,bussinessMail=Users.BussinessMail,nickname=Users.Nickname,phoneNumber = Users.PhoneNumber}).ToList();
+        [HttpGet]
+        public async Task<ActionResult<string>> GetUsers()
+        {
+            var shortUsers = (from Users in _context.Users
+                              where Users.role != Role.admin
+                              select new
+                              {
+                                  id = Users.Id,
+                                  name = Users.Name,
+                                  lastName = Users.LastName,
+                                  email = Users.Email,
+                                  bussinessMail = Users.BussinessMail,
+                                  nickname = Users.Nickname,
+                                  phoneNumber = Users.PhoneNumber
+                              }).ToList();
             string jsonString = JsonConvert.SerializeObject(shortUsers);
-           
+
             return jsonString;
         }
+
         [Route(("/api/[controller]/GETUSER"))]
         [HttpGet]
-        public async Task<ActionResult<User>> getUser(int id)
+        public async Task<ActionResult<User>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
                 return BadRequest();
             return Ok(user);
         }
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> getUserNickame(int id)
+        public async Task<ActionResult<User>> GetUserNickame(int id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
                 return BadRequest();
-            return Ok( user.Nickname);
+            return Ok(user.Nickname);
         }
+
         [Route("/api/[controller]/POST")]
         [HttpPost]
         public async Task<ActionResult<User>> AddUser(User NewUser)
         {
             var dbUser = _context.Users.Where(u => u.Email == NewUser.Email).FirstOrDefault();
-            if(dbUser != null)
+
+            if (dbUser != null)
             {
                 return BadRequest("User already exist");
             }
+
             string changingPass = NewUser.Password;
-          NewUser.Password = BCrypt.Net.BCrypt.HashPassword(changingPass);  
-           await _context.Users.AddAsync(NewUser);
-          await  _context.SaveChangesAsync();
+            NewUser.Password = BCrypt.Net.BCrypt.HashPassword(changingPass);
+            await _context.Users.AddAsync(NewUser);
+            await _context.SaveChangesAsync();
             return Ok(NewUser);
         }
 
         [HttpPut]
-        public async Task<ActionResult<User>> ChangeUser(int id,[FromBody] EditUserModel editUser)
+        public async Task<ActionResult<User>> ChangeUser(int id, [FromBody] EditUserModel editUser)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user == null) {
+            if (user == null)
+            {
                 return BadRequest();
             }
-           
+
             user.Nickname = editUser.Nickname;
             user.BussinessMail = editUser.BussinessMail;
             user.PhoneNumber = editUser.ContactNumber;
             user.Description = editUser.Description;
-
             await _context.SaveChangesAsync();
 
             return Ok(await _context.Words.ToListAsync());
-
         }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<User>> Delete(int id)
         {
             var user = await _context.Users.FindAsync(id);
-            if(user == null)
+            if (user == null)
             {
                 return BadRequest();
             }
-             _context.Users.Remove(user);
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return Ok();
         }
+
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] string email)
         {
@@ -104,6 +119,7 @@ namespace wordApiProject.Controllers
 
             return Ok("You may now reset your password.");
         }
+
         [HttpPost("reset-password")]
         public async Task<ActionResult<string>> ResettPassword(ResetPasswordRequest request)
         {
@@ -113,8 +129,7 @@ namespace wordApiProject.Controllers
                 return BadRequest("Invalid Token.");
             }
 
-
-            user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password); 
+            user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
             user.PasswordResetToken = null;
             user.ResetTokenExpires = null;
             user.FailedPasswordAttempts = 0;
@@ -122,6 +137,7 @@ namespace wordApiProject.Controllers
 
             return Ok();
         }
+
         private string CreateRandomToken()
         {
             return Convert.ToHexString(RandomNumberGenerator.GetBytes(4));
