@@ -25,28 +25,25 @@ namespace wordApiProject.Controllers
             {
                 var primaryKey = from User in _context.Users where (User.Email == LoginUser.UserName) select User.Id;
                 int id = primaryKey.First();
-                var check = _context.Users.Find(id);
+                var logedInUser = _context.Users.Find(id);
 
-                if (!(BCrypt.Net.BCrypt.Verify(LoginUser.Password, check.Password)))
+                if (!(BCrypt.Net.BCrypt.Verify(LoginUser.Password, logedInUser.Password)))
                 {
-                    check.FailedPasswordAttempts++;
+                    logedInUser.FailedPasswordAttempts++;
                     _context.SaveChangesAsync();
                     return BadRequest("Wrong password");
                 }
-                else if (check.FailedPasswordAttempts >= 3)
+                else if (logedInUser.FailedPasswordAttempts >= 3)
                 {
                     return BadRequest("you are banned");
-                    check.BanExpires = DateTime.Now.AddMinutes(15);
-                    _context.SaveChangesAsync();
                 }
                 else
                 {
-                    check.FailedPasswordAttempts = 0;
-                    _context.SaveChangesAsync();
+                    ResetFailedAttempts(logedInUser);
                     var claims = new[]
                     {
-                        new Claim(type: "id",value: check.Id.ToString()),
-                        new Claim(type: "role",value:check.role.ToString()),
+                        new Claim(type: "id",value: logedInUser.Id.ToString()),
+                        new Claim(type: "role",value:logedInUser.role.ToString()),
                     };
                     var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is my custom Secret key for authentication@345"));
                     var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
@@ -68,6 +65,10 @@ namespace wordApiProject.Controllers
                 return BadRequest("User not found");
             }
         }
-
+        private void ResetFailedAttempts(User logedInUser)
+        {
+            logedInUser.FailedPasswordAttempts = 0;
+            _context.SaveChangesAsync();
+        }
     }
 }
