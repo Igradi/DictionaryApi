@@ -10,6 +10,7 @@ namespace wordApiProject.Data
             public DbSet<User> Users { get; set; }
             public DbSet<UserWord>UserWords { get; set; }
             public DbSet<Words> Words { get; set; }
+            public DbSet<PhoneNumber> PhoneNumbers { get; set; }
 
         internal Task<bool> FindAsync(Func<object, bool> value)
         {

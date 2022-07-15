@@ -33,7 +33,7 @@ namespace wordApiProject.Controllers
                                   email = Users.Email,
                                   bussinessMail = Users.BussinessMail,
                                   nickname = Users.Nickname,
-                                  phoneNumber = Users.PhoneNumber
+                                 // phoneNumber = Users.PhoneNumber
                               }).ToList();
             string jsonString = JsonConvert.SerializeObject(shortUsers);
 
@@ -88,7 +88,8 @@ namespace wordApiProject.Controllers
 
             user.Nickname = editUser.Nickname;
             user.BussinessMail = editUser.BussinessMail;
-            user.PhoneNumber = editUser.ContactNumber;
+          //  user.PhoneNumber =editUser.ContactNumber ;
+
             user.Description = editUser.Description;
             await _context.SaveChangesAsync();
 
