@@ -33,7 +33,7 @@ namespace wordApiProject
             return Ok(query);
         }
 
-        [HttpGet("{id},{WordName},{wordType}")]
+        [HttpGet("{id},{wordName},{wordType}")]
         public async Task<ActionResult> PutNewWord(int id, string wordName, string wordType)
         {
             var newWord = new Words();
@@ -47,9 +47,9 @@ namespace wordApiProject
             if (wordExists.Count() > 0)
             {
                 var link = from Has in _context.UserWords where (Has.WordId == wordExists.First()) select Has;
-                var listOfIds = (from Has in _context.UserWords where (Has.WordId == wordExists.First()) select Has.UserId).ToList();
-
-                if (!listOfIds.Contains(id))
+                bool userHasWord = await _context.UserWords.AnyAsync(x=>x.WordId == wordExists.First() && x.UserId==id);
+                
+                if (!userHasWord)
                 {
                     newHas.WordId = link.First().WordId;
                     newHas.UserId = id;
@@ -57,29 +57,25 @@ namespace wordApiProject
                     _context.UserWords.Add(newHas);
                     await _context.SaveChangesAsync();
 
-                    return Ok();
                 }
-                return Ok();
             }
             else
             {
                 _context.Words.Add(newWord);
                 await _context.SaveChangesAsync();
 
-                var IdQuery = from Words in _context.Words where (Words.WordName == newWord.WordName) select Words.Id;
-
-                newHas.WordId = IdQuery.First();
+                newHas.WordId = newWord.Id;
                 newHas.UserId = id;
 
                 _context.UserWords.Add(newHas);
                 await _context.SaveChangesAsync();
-
-                var IdHasQuery = from Hass in _context.UserWords where (Hass.WordId == newHas.WordId) select Hass.Id;
+               
                 var dbWord = await _context.Words.FindAsync(newHas.WordId);
-                dbWord.HasId = IdHasQuery.First();
+                dbWord.HasId = newHas.Id;
                 await _context.SaveChangesAsync();
-                return Ok();
+                
             }
+            return Ok();
         }
 
         [HttpGet]
