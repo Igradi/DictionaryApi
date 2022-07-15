@@ -128,12 +128,12 @@ namespace wordApiProject
         [HttpPut]
         public async Task<ActionResult<List<Words>>> UpdateWord(Words request)
         {
-            var dbWord = await _context.Words.FindAsync(request.Id);
-            if (dbWord == null)
+            var wordDto = await _context.Words.FindAsync(request.Id);
+            if (wordDto == null)
                 return BadRequest("word not found.");
 
-            dbWord.WordName = request.WordName;
-            dbWord.HasId = request.HasId;
+            wordDto.WordName = request.WordName;
+            wordDto.HasId = request.HasId;
 
             await _context.SaveChangesAsync();
 
