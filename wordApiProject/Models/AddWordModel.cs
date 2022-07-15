@@ -3,8 +3,8 @@
 {
     public class AddWordModel
     {
-       public int id;
-       public string wordName;
-       public string wordType;
+       public int Id;
+       public string WordName;
+       public string Wordtype;
     }
 }

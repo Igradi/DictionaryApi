@@ -2,9 +2,9 @@
 {
     public class TypesModel
     {
-        public int nouns = 0;
-        public int adjectives = 0;
-        public int verb = 0;
-        public int adverb = 0;
+        public int Nouns = 0;
+        public int Adjectives = 0;
+        public int Verb = 0;
+        public int Adverb = 0;
     }
 }

@@ -33,7 +33,7 @@ namespace wordApiProject
             return Ok(query);
         }
 
-        [HttpGet("{id},{wordName},{wordType}")]
+        [HttpGet("{id},{WordName},{wordType}")]
         public async Task<ActionResult> PutNewWord(int id, string wordName, string wordType)
         {
             var newWord = new Words();
@@ -112,16 +112,16 @@ namespace wordApiProject
                 switch (type.name)
                 {
                     case "noun":
-                        types.nouns = type.value;
+                        types.Nouns = type.value;
                         break;
                     case "adjective":
-                        types.adjectives = type.value;
+                        types.Adjectives = type.value;
                         break;
-                    case "adverb":
-                        types.adverb = type.value;
+                    case "Adverb":
+                        types.Adverb = type.value;
                         break;
-                    case "verb":
-                        types.verb = type.value;
+                    case "Verb":
+                        types.Verb = type.value;
                         break;
                 }
             }

@@ -31,8 +31,8 @@ namespace wordApiProject.Controllers
             foreach (var word in ordered)
             {
                 RepetitionModel newEntry = new RepetitionModel();
-                newEntry.wordName = _context.Words.Find(word.Element).WordName;
-                newEntry.repetitions = word.Counter;
+                newEntry.WordName = _context.Words.Find(word.Element).WordName;
+                newEntry.Repetitions = word.Counter;
                 topWords.Add(newEntry);
             }
             string jsonString = JsonConvert.SerializeObject(topWords);

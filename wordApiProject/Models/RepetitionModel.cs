@@ -2,7 +2,7 @@
 {
     public class RepetitionModel
     {
-        public string wordName { get; set; } = string.Empty;
-        public int repetitions { get; set; } = 0;
+        public string WordName { get; set; } = string.Empty;
+        public int Repetitions { get; set; } = 0;
     }
 }
