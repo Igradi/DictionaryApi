@@ -22,18 +22,6 @@ namespace wordApiProject.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("wordApiProject.PhoneNumber", b =>
-                {
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.ToTable("PhoneNumbers");
-                });
-
             modelBuilder.Entity("wordApiProject.User", b =>
                 {
                     b.Property<int>("Id")
@@ -77,6 +65,10 @@ namespace wordApiProject.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordResetToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ResetTokenExpires")
